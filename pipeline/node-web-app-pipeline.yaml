@@ -6,8 +6,6 @@ metadata:
 spec:
   workspaces:
     - name: shared-workspace
-      persistentVolumeClaim:
-        claimName: my-claim
   params:
     - name: node-web-app-source
       default: https://github.com/vikaspogu/node-web-app.git

@@ -109,6 +109,13 @@ There are a few ways to install argocd into a Kubernetes Cluster.  We used the A
 
 For this tutorial, I used [the Console Install](https://argocd-operator.readthedocs.io/en/latest/install/openshift/) using the Argo CD Operator on OpenShift.  
 
+add full cluster admin access to argocd
+
+```bash
+oc adm policy add-cluster-role-to-user cluster-admin -z argocd-application-controller -n argocd
+
+```
+
 ### Install OpenShift Pipeline Operator 
 
 OpenShift delivers a preview of tekton through the OpenShift Pipeline Operator.  We used the OpenShift Pipeline Operator.  
