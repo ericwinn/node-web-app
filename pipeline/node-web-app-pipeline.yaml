@@ -52,4 +52,6 @@ spec:
           value: node-web-app
         - name: flags
           value: --insecure
+      runAfter:
+        - build-and-publish-image
     
