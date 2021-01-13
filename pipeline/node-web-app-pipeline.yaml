@@ -44,4 +44,12 @@ spec:
       workspaces:
       - name: source
         workspace: shared-workspace
+    - name: sync-application
+      taskRef:
+        name: argocd-task-sync-and-wait
+      params:
+        - name: application-name
+          value: node-web-app
+        - name: flags
+          value: --insecure
     
