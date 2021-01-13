@@ -51,7 +51,7 @@ spec:
         - name: application-name
           value: node-web-app
         - name: flags
-          value: --insecure
+          value: --insecure --grpc-web
       runAfter:
         - build-and-publish-image
     
