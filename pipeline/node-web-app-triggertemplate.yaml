@@ -2,6 +2,7 @@ apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
   name: node-web-app-tt
+  namespace: node-web-project
 spec:
   params: 
   - name: git-repo-url
@@ -57,6 +58,7 @@ apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
   name: node-web-app-tb
+  namespace: node-web-project
 spec:
   params:
   - name: git-repo-url
@@ -72,6 +74,7 @@ apiVersion: triggers.tekton.dev/v1alpha1
 kind: Trigger
 metadata:
   name: node-web-app-trigger
+  namespace: node-web-project
 spec:
   serviceAccountName: pipeline
   bindings:
@@ -84,6 +87,7 @@ apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
   name: node-web-app
+  namespace: node-web-project
 spec:
   serviceAccountName: pipeline
   triggers:
