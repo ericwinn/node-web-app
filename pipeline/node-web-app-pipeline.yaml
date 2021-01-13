@@ -4,28 +4,46 @@ metadata:
   name: node-web-app-pipeline
   namespace: node-web-project
 spec:
-  resources:
+  workspaces:
+    - name: shared-workspace
+      persistentVolumeClaim:
+        claimName: my-claim
+  params:
     - name: node-web-app-source
-      type: git
+      default: https://github.com/vikaspogu/node-web-app.git
     - name: node-web-app-image
-      type: image
+      default: image-registry.openshift-image-registry.svc:5000/node-web-project/web-node-app:latest
   tasks:
+    - name: fetch-repository
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      workspaces:
+      - name: output
+        workspace: shared-workspace
+      params:
+      - name: url
+        value: $(params.node-web-app-source)
+    - name: source-lister
+      taskRef:
+        name: source-lister
+      workspaces:
+      - name: input
+        workspace: shared-workspace
+      runAfter:
+        - fetch-repository
     - name: build-and-publish-image
       params:
-        - name: BUILDER_IMAGE
-          value: 'quay.io/buildah/stable:v1.11.0'
-        - name: DOCKERFILE
-          value: ./Dockerfile
+        - name: IMAGE
+          value: $(params.node-web-app-image)
         - name: TLSVERIFY
           value: 'false'
-      resources:
-        inputs:
-          - name: source
-            resource: node-web-app-source
-        outputs:
-          - name: image
-            resource: node-web-app-image
       taskRef:
         kind: ClusterTask
         name: buildah
+      runAfter:
+        - source-lister
+      workspaces:
+      - name: source
+        workspace: shared-workspace
     

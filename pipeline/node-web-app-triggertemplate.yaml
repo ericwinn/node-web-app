@@ -1,4 +1,4 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
   name: node-web-app-tt
@@ -53,7 +53,7 @@ spec:
 
 --- 
 
-apiVersion: tekton.dev/v1alpha1
+apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
   name: node-web-app-tb
@@ -68,18 +68,26 @@ spec:
 
 ---
 
-apiVersion: tekton.dev/v1alpha1
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: Trigger
+metadata:
+  name: node-web-app-trigger
+spec:
+  serviceAccountName: pipeline
+  bindings:
+    - ref: node-web-app-tb
+  template:
+    name: node-web-app-tt
+
+---
+apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: node-web-app-el
+  name: node-web-app
 spec:
   serviceAccountName: pipeline
   triggers:
-  - bindings:
-    - name: node-web-app-tb
-    template:
-      name: node-web-app-tt
-
+    - triggerRef: node-web-app-trigger
 ---
 
 apiVersion: route.openshift.io/v1
@@ -88,7 +96,6 @@ metadata:
   name: el-node-web-app
   namespace: node-web-project
 spec:
-  host: el-node-web-app.apps.roly-ocp43-cluster.roly-ocp.com
   to:
     kind: Service
     name: el-node-web-app-el
