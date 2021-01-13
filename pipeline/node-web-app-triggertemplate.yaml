@@ -102,5 +102,5 @@ metadata:
 spec:
   to:
     kind: Service
-    name: el-node-web-app-el
+    name: el-node-web-app
     weight: 100
