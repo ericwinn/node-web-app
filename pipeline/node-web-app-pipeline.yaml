@@ -52,6 +52,8 @@ spec:
           value: node-web-app
         - name: flags
           value: --insecure --grpc-web
+        - name: argocd-version
+          value: v1.7.11
       runAfter:
         - build-and-publish-image
     
