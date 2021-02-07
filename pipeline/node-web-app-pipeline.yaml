@@ -7,10 +7,9 @@ spec:
   workspaces:
     - name: shared-workspace
   params:
-    - name: node-web-app-source
-      default: https://github.com/vikaspogu/node-web-app.git
-    - name: node-web-app-image
-      default: image-registry.openshift-image-registry.svc:5000/node-web-project/web-node-app:latest
+    - name: source
+    - name: appname
+    - name: image
   tasks:
     - name: fetch-repository
       taskRef:
@@ -21,35 +20,28 @@ spec:
         workspace: shared-workspace
       params:
       - name: url
-        value: $(params.node-web-app-source)
-    - name: source-lister
-      taskRef:
-        name: source-lister
-      workspaces:
-      - name: input
-        workspace: shared-workspace
-      runAfter:
-        - fetch-repository
+        value: $(params.source)
     - name: build-and-publish-image
       params:
         - name: IMAGE
-          value: $(params.node-web-app-image)
+          value: $(params.image)
         - name: TLSVERIFY
           value: 'false'
       taskRef:
         kind: ClusterTask
         name: buildah
       runAfter:
-        - source-lister
+        - fetch-repository
       workspaces:
       - name: source
         workspace: shared-workspace
     - name: sync-application
       taskRef:
+        kind: ClusterTask
         name: argocd-task-sync-and-wait
       params:
         - name: application-name
-          value: node-web-app
+          value: $(params.appname)
         - name: flags
           value: --insecure --grpc-web
         - name: argocd-version
