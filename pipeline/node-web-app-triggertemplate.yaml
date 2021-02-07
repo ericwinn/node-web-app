@@ -49,20 +49,6 @@ spec:
     value: $(body.repository.name)
 
 ---
-
-apiVersion: triggers.tekton.dev/v1alpha1
-kind: Trigger
-metadata:
-  name: node-web-app-trigger
-  namespace: node-web-project
-spec:
-  serviceAccountName: pipeline
-  bindings:
-    - ref: node-web-app-tb
-  template:
-    name: node-web-app-tt
-
----
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
@@ -71,7 +57,11 @@ metadata:
 spec:
   serviceAccountName: pipeline
   triggers:
-    - triggerRef: node-web-app-trigger
+    - name: node-web-app-trigger
+      bindings:
+        - ref: node-web-app-tb
+      template:
+        name: node-web-app-tt
 ---
 
 apiVersion: route.openshift.io/v1

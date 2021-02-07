@@ -126,6 +126,12 @@ For this tutorial I follwed the instructions to install the [OpenShift Pipeline 
 
 After tekton builds the application and pushed the container image into the Image Repository, tekton needs to trigger a new OpenShift Deployment.  There is a special task that allows Tekton to trigger a argocd sync.  You have to install the [Argo CD Tekton Task](https://github.com/tektoncd/catalog/tree/v1beta1/argocd)
 
+Get admin password
+
+```bash
+kubectl -n argocd get secret example-argocd-cluster -o jsonpath='{.data.admin\.password}' | base64 -d
+```
+
 ### Create OCP Project 
 You need to create an OpenShift project called node-web-project or you will need to change all namespaces in the YAML File to match your project 
 
@@ -134,6 +140,7 @@ oc new-project node-web-project
 ```
 
 ### Allow Pipeline to access registry for build and deploy
+
 Your project will need the ability to publish and pull from the image repository.  
 
 ```
