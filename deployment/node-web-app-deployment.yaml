@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: node-web-app
-        image: image-registry.openshift-image-registry.svc:5000/node-web-project/web-node-app:latest
+        image: registry-vpc.cn-hongkong.aliyuncs.com/construct-infra/wzb-devops-test:web-node-app-latest
         imagePullPolicy: Always
         envFrom:
         - configMapRef:
